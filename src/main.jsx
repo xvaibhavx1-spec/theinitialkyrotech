@@ -512,7 +512,7 @@ function MeetTheTeam({ go }) {
         <div className="eyebrow">03 / THE PEOPLE BEHIND KYRO</div>
 
         <h2>
-          Meet the <em>Minds Behind KYRO.</em>
+          Meet the <em>Founders.</em>
         </h2>
 
         <p>
@@ -564,6 +564,17 @@ function MeetTheTeam({ go }) {
     </section>
   );
 }
+const pages = [
+  ["home", "Home", "/"],
+  ["about", "About", "/about/"],
+  ["services", "Services", "/services/"],
+  ["work", "Projects", "/projects/"],
+  ["team", "Founder", "/founder/"],
+  ["contact", "Contact", "/contact/"]
+];
+const page = document.body.dataset.page || "home";
+const pageUrl = (id) => pages.find(([key]) => key === id)[2];
+
 function App() {
 
   const [open, setOpen] = useState(false);
@@ -585,15 +596,7 @@ function App() {
 
   }, []);
 
-  const go = (id) => {
-    setOpen(false);
-
-    document
-      .getElementById(id)
-      ?.scrollIntoView({
-        behavior: "smooth"
-      });
-  };
+  const go = (id) => window.location.assign(pageUrl(id));
 
   const activeService = services[active];
 
@@ -602,7 +605,7 @@ function App() {
   return (
     <div className="page">
 
-      <Intro />
+      {page === "home" && <Intro />}
 
       <Stars />
 
@@ -626,25 +629,11 @@ function App() {
           <i>TECH</i>
         </button>
 
-        <div className="links">
-
-          <button onClick={() => go("about")}>
-            About
-          </button>
-
-          <button onClick={() => go("services")}>
-            Services
-          </button>
-
-          <button onClick={() => go("work")}>
-            Work
-          </button>
-
-          <button onClick={() => go("contact")}>
-            Contact
-          </button>
-
-        </div>
+        <nav className="links" aria-label="Main navigation">
+          {pages.map(([id, label, url]) => (
+            <a key={id} href={url} aria-current={page === id ? "page" : undefined}>{label}</a>
+          ))}
+        </nav>
 
         <button
           className="navCta"
@@ -655,7 +644,7 @@ function App() {
         </button>
 
         <button
-          className="hamb"
+          className="hamb" aria-label="Toggle navigation" aria-expanded={open}
           onClick={() => setOpen(!open)}
         >
           {open ? <X /> : <Menu />}
@@ -664,27 +653,15 @@ function App() {
       </header>
 
       {open && (
-        <div className="mobileLinks">
-
-          {[
-            "about",
-            "services",
-            "work",
-            "contact"
-          ].map((x) => (
-            <button
-              key={x}
-              onClick={() => go(x)}
-            >
-              {x}
-            </button>
+        <nav id="mobile-nav" className="mobileLinks" aria-label="Mobile navigation">
+          {pages.map(([id, label, url]) => (
+            <a key={id} href={url} aria-current={page === id ? "page" : undefined}>{label}</a>
           ))}
-
-        </div>
+        </nav>
       )}
 
-      <main>
-
+      <main className={page === "home" ? undefined : "interior-page"}>
+        {page === "home" && (<>
         <section
           id="home"
           className="cosmicHero"
@@ -716,7 +693,7 @@ function App() {
 
               <button
                 className="heroBtn"
-                onClick={() => go("contact")}
+                onClick={() => go("services")}
               >
                 Explore KYRO
                 <ArrowUpRight size={18} />
@@ -774,7 +751,13 @@ function App() {
           </div>
 
         </section>
-
+        <nav className="cosmicSection home-pages" aria-label="Explore KYRO">
+          {pages.filter(([id]) => id !== "home").map(([id, label, url]) => (
+            <a key={id} href={url}>{label}</a>
+          ))}
+        </nav>
+        </>)}
+        {page === "about" && (<>
         <section
           id="about"
           className="cosmicSection aboutSection"
@@ -808,7 +791,7 @@ function App() {
                 <div className="founderCredit">
                    <span>FOUNDER</span>
               <h3>Vaibhav Upadhyay</h3>
-                    <p>Founder &amp; CEO — THE INITIAL KYRO TECH</p>
+                    <p><a href="/founder/">Meet our founder</a></p>
                     
 </div>
             </div>
@@ -833,7 +816,23 @@ function App() {
           </div>
 
         </section>
+        <section className="cosmicSection trustedSection">
 
+          <SectionHeader
+            eyebrow="06 / GLOBAL VALIDATION"
+            title="Trusted By Industry"
+            accent="Leaders"
+            desc="We collaborate with visionary organizations to architect high-performance software systems."
+          />
+
+          <Marquee
+            items={logos}
+            className="logoMarquee"
+          />
+
+        </section>
+        </>)}
+        {page === "services" && (<>
         <section
           id="services"
           className="cosmicSection servicesSection"
@@ -945,7 +944,6 @@ function App() {
           </div>
 
         </section>
-
         <section className="cosmicSection stackSection">
 
           <SectionHeader
@@ -1031,7 +1029,6 @@ function App() {
           </div>
 
         </section>
-
         <div className="trustedTech">
 
           <div className="eyebrow">
@@ -1047,7 +1044,8 @@ function App() {
           />
 
         </div>
-
+        </>)}
+        {page === "work" && (<>
         <section
           id="work"
           className="cosmicSection workSection"
@@ -1153,7 +1151,7 @@ function App() {
               <button
                 onClick={() => go("contact")}
               >
-                View case study
+                Discuss a similar project
                 <ArrowUpRight size={15} />
               </button>
 
@@ -1188,7 +1186,6 @@ function App() {
           </div>
 
         </section>
-
         <section className="constellation">
 
           <SectionHeader
@@ -1238,23 +1235,11 @@ function App() {
           </div>
 
         </section>
-
-        <section className="cosmicSection trustedSection">
-
-          <SectionHeader
-            eyebrow="06 / GLOBAL VALIDATION"
-            title="Trusted By Industry"
-            accent="Leaders"
-            desc="We collaborate with visionary organizations to architect high-performance software systems."
-          />
-
-          <Marquee
-            items={logos}
-            className="logoMarquee"
-          />
-
-        </section>
-<MeetTheTeam go={go} />
+        </>)}
+        {page === "team" && (<>
+        <MeetTheTeam go={go} />
+        </>)}
+        {page === "contact" && (<>
         <section
           id="contact"
           className="contact"
@@ -1313,7 +1298,6 @@ function App() {
           </div>
 
         </section>
-
         <section className="newsletter">
 
           <div className="eyebrow">
@@ -1353,7 +1337,7 @@ function App() {
           </form>
 
         </section>
-
+        </>)}
       </main>
 
       <footer>

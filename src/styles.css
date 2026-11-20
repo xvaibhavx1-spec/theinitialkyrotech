@@ -150,6 +150,34 @@ a {
   color: #fff;
 }
 
+.links a,
+.mobileLinks a,
+.home-pages a,
+.founderCredit a {
+  color: #c5d6ec;
+  text-decoration: none;
+}
+
+.links a:hover,
+.links [aria-current="page"],
+.mobileLinks [aria-current="page"],
+.home-pages a:hover,
+.founderCredit a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.interior-page {
+  min-height: 65vh;
+  padding-top: 55px;
+}
+
+.home-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+}
+
 .navCta {
   border: 1px solid #50657f;
   background: rgba(255,255,255,.03);
@@ -2806,3 +2834,4 @@ footer > div > button {
     height: 330px;
   }
 }
+
